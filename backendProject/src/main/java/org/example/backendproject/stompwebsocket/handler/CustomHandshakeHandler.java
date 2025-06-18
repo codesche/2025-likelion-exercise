@@ -18,7 +18,7 @@ public class CustomHandshakeHandler extends DefaultHandshakeHandler {
     }
 
     private String getNickName(String query) {
-        if (query == null || query.contains("nickname=")) {
+        if (query == null || !query.contains("nickname=")) {
             return "닉네임없음";
         } else {
             return query.split("nicknames=")[1];
