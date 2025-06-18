@@ -29,11 +29,14 @@ public class ChatController {
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(ChatMessage message) {
 
+        message.setMessage(instanceName + " " + message.getMessage());
+
         if (message.getTo() != null && !message.getTo().isEmpty()) {
             // 귓속말
             // 내 아이디로 귓속말 경로를 활성화 함
             template.convertAndSendToUser(message.getTo(), "/queue/private", message);
         } else {
+            // 일반 메시지
             // message에서 roomId를 추출해서 해당 roomId를 구독하고 있는 클라이언트에게 메세지를 전달
             template.convertAndSend("/topic/" + message.getRoomId(), message);
         }
