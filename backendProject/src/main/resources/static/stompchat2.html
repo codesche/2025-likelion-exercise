@@ -92,30 +92,30 @@
     function loadRoomList() {
 
         fetch("/api/rooms")
-            .then(response => response.json())
-            .then(data => {
-                const roomsDiv = document.getElementById("rooms");
-                const roomListDiv = document.getElementById("roomList");
-                roomsDiv.innerHTML = "";
-                if (data.length === 0) {
-                    roomListDiv.classList.add("hidden");
-                } else {
-                    roomListDiv.classList.remove("hidden");
-                    data.forEach(room => {
-                        const div = document.createElement("div");
-                        div.className = "room-item";
-                        div.textContent = `방 번호: ${room.roomId}`;
-                        div.onclick = () => {
-                            const nick = prompt("닉네임을 입력하세요:");
-                            if (!nick) return;
-                            document.getElementById("user").value = nick;
-                            document.getElementById("room").value = room.roomId;
-                            connect();
-                        };
-                        roomsDiv.appendChild(div);
-                    });
-                }
-            });
+        .then(response => response.json())
+        .then(data => {
+            const roomsDiv = document.getElementById("rooms");
+            const roomListDiv = document.getElementById("roomList");
+            roomsDiv.innerHTML = "";
+            if (data.length === 0) {
+                roomListDiv.classList.add("hidden");
+            } else {
+                roomListDiv.classList.remove("hidden");
+                data.forEach(room => {
+                    const div = document.createElement("div");
+                    div.className = "room-item";
+                    div.textContent = `방 번호: ${room.roomId}`;
+                    div.onclick = () => {
+                        const nick = prompt("닉네임을 입력하세요:");
+                        if (!nick) return;
+                        document.getElementById("user").value = nick;
+                        document.getElementById("room").value = room.roomId;
+                        connect();
+                    };
+                    roomsDiv.appendChild(div);
+                });
+            }
+        });
     }
 
     function connect() {
@@ -129,9 +129,9 @@
 
         //방생성기능
         //방생성기능
-     fetch(`/api/rooms/${roomId}`, { method: "POST" })
+        fetch(`/api/rooms/${roomId}`, { method: "POST" })
 
-      //  const socket = new WebSocket('/ws-chat');
+        //  const socket = new WebSocket('/ws-chat');
         const socket = new WebSocket('/ws-chat?nickname=' + nickname);
         stompClient = Stomp.over(socket);
 
@@ -141,16 +141,16 @@
             document.getElementById("enterRow").classList.add("hidden");
             document.getElementById("roomList").classList.add("hidden");
 
-        //    document.getElementById("whisperRow").classList.remove("hidden"); // ✅ 여기!  닉네임 작성
+            document.getElementById("whisperRow").classList.remove("hidden"); // ✅ 여기!  닉네임 작성
 
-            // 일반채팅
-            stompClient.subscribe(`/topic/${roomId}`, function (chat) {
+
+            //일반채팅
+            stompClient.subscribe(`/topic/room.${roomId}`, function (chat) {
                 const message = JSON.parse(chat.body);
                 showMessage(message.from, message.message);
             });
 
-
-            // 귓속말
+            //귓속말
             stompClient.subscribe('/user/queue/private', function (message) {
                 const msg = JSON.parse(message.body);
                 alert("💬 귓속말: " + msg.from + " - " + msg.message);
