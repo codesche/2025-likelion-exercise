@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.example.backendproject.stompwebsocket.dto.ChatMessage;
+import org.example.backendproject.stompwebsocket.gpt.GPTService;
 import org.example.backendproject.stompwebsocket.redis.RedisPublisher;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -15,21 +16,29 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class ChatController {
 
-    // 단일 브로드캐스트 (동적으로 방 생성이 안 됨)
-//    @MessageMapping("/chat.sendMessage")
-//    @SendTo("/topic/public")
-//    public ChatMessage sendMessage(ChatMessage message) {
-//        return message;
-//    }
-
-    // 서버가 클라이언트에게 수동으로 메세지를 보낼 수 있도록 하는 클래스
-    private final SimpMessagingTemplate template;
-
     @Value("${PROJECT_NAME:web Server}")
     private String instanceName;
 
     private final RedisPublisher redisPublisher;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    // 서버가 클라이언트에게 수동으로 메세지를 보낼 수 있도록 하는 클래스
+    private final SimpMessagingTemplate template;
+
+    private final GPTService gptService;
+
+    // 단일 브로드캐스트 (동적으로 방 생성이 안 됨)
+    @MessageMapping("/gpt")
+    public void sendMessageGPT(ChatMessage message) throws Exception {
+
+        template.convertAndSend("/topic/gpt", message);
+
+        // gpt 메세지 반환
+        String getResponse = gptService.gptMessage(message.getMessage());
+        ChatMessage chatMessage = new ChatMessage("난 GPT", getResponse);
+        template.convertAndSend("/topic/gpt", chatMessage);
+    }
+
 
     // 동적으로 방 생성 가능
     @MessageMapping("/chat.sendMessage")
