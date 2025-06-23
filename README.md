@@ -41,5 +41,20 @@
    4. Jenkins 배포 자동화 진행 (로컬에 배포) 
 
 
+## 2025-06-23
+
+링크: https://codesche.oopy.io/21ade3f7-e3a8-8071-8488-ed0596c1bba4
+
+1. Jenkins 심화 - profile 적용(분기 처리)
+   1. 폴더 구조 변경
+   2. 에러 확인
+2. JPA
+   1. Spring Data JPA
+   2. 실습 진행 방식
+   3. JPA 심화
+   4. '회원가입 + 로그인' 실습
+3. 오늘 푸시한 커밋 리스트
+
+
 
 
