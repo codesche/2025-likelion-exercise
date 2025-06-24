@@ -1,14 +1,15 @@
 package org.example.backendproject.Auth.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.backendproject.Auth.dto.LoginRequestDTO;
 import org.example.backendproject.Auth.dto.SignUpRequestDTO;
 import org.example.backendproject.user.dto.UserDTO;
+import org.example.backendproject.user.dto.UserProfileDTO;
 import org.example.backendproject.user.entity.User;
 import org.example.backendproject.user.entity.UserProfile;
 import org.example.backendproject.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -16,7 +17,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
-    @Transactional                              // 해당 어노테이션 선언해야 저장이 된다.
+    @Transactional                             // 해당 어노테이션 선언해야 저장이 된다.
     public void signUp(SignUpRequestDTO dto) {
 
         // 사용자 조회 여부 확인, null값 체크
@@ -53,10 +54,12 @@ public class AuthService {
         userDTO.setId(user.getId());
         userDTO.setUserid(user.getUserid());
 
-        userDTO.setUsername(user.getUserProfile().getUsername());
-        userDTO.setEmail(user.getUserProfile().getEmail());
-        userDTO.setPhone(user.getUserProfile().getPhone());
-        userDTO.setAddress(user.getUserProfile().getAddress());
+        // 유저 프로필
+        UserProfileDTO profileDTO = new UserProfileDTO();
+        profileDTO.setUsername(user.getUserProfile().getUsername());
+        profileDTO.setEmail(user.getUserProfile().getEmail());
+        profileDTO.setPhone(user.getUserProfile().getPhone());
+        profileDTO.setAddress(user.getUserProfile().getAddress());
 
         return userDTO;
     }
