@@ -15,7 +15,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     //@Query(value = "SELECT * FROM board WHERE user_id = :userId", nativeQuery = true)  //이거 사용안해도 되는데 예시로 네이티브쿼라로 작성한거임
     List<Board> findByUserId(Long userId);
 
-
     //보드 엔티티를 기준으로 조회하되
     //Board 엔티티 전체를 반환하는게 아니라 원하는 값만 보드dto 생성자에 넣어서 리스트로 반환합니다
     //대소문자 구분없이 검색하는 옵션
@@ -37,7 +36,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     //페이징 전체 목록
     @Query("SELECT new org.example.backendproject.board.dto.BoardDTO(" +
         "b.id, b.title, b.content,b.user.userProfile.username, b.user.id,b.created_date, b.updated_date) " +
-        "FROM Board b ORDER BY b.title DESC")
+        "FROM Board b")
     //  + "ORDER BY b.title DESC") //쿼리로 정렬
     Page<BoardDTO> findAllPaging(Pageable pageable);
     //페이징 처리 결과를 담는 페이징 객체입니다.
@@ -51,7 +50,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
         "b.id, b.title, b.content,b.user.userProfile.username, b.user.id,  b.created_date, b.updated_date) " +
         "FROM Board b " +
         "WHERE LOWER(b.title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-        "OR LOWER(b.content) LIKE LOWER(CONCAT('%', :keyword, '%')) ORDER BY b.title DESC")
+        "OR LOWER(b.content) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     // + "ORDER BY b.title DESC")// 쿼리로 정렬
     Page<BoardDTO> searchKeywordPaging(@Param("keyword") String keyword, Pageable pageable);
 
