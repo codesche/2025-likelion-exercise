@@ -36,8 +36,8 @@ public class UserService {
         UserProfileDTO profileDTO = new UserProfileDTO();
         profileDTO.setUsername(profile.getUsername());
         profileDTO.setEmail(profile.getEmail());
-        profileDTO.setPhone(profileDTO.getPhone());
-        profileDTO.setAddress(profileDTO.getAddress());
+        profileDTO.setPhone(profile.getPhone());
+        profileDTO.setAddress(profile.getAddress());
         dto.setProfile(profileDTO);
 
         return dto;
