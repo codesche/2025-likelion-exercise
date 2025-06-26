@@ -98,7 +98,12 @@
         e.preventDefault();
         const userid = document.getElementById('userid').value;
         const password = document.getElementById('password').value;
-        fetch('/api/auth/loginSecurity', {
+        // fetch('/api/auth/loginSecurity', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({ userid, password })
+        // })
+        fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userid, password })
