@@ -12,4 +12,7 @@ public interface AuthRepository extends JpaRepository<Auth, Long> {
     Optional<Auth> findByRefreshToken(String refreshToken);
 
     boolean existsByUser(User user);
+
+    // Auth 엔티티에 토큰 저장 (User와 1:1 매핑)
+    Optional<Auth> findByUser(User user);
 }
