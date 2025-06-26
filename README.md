@@ -202,3 +202,43 @@
 2025-06-25 | [feat(image): 메인 페이지 접속할 때 보여지는 도메인 이미지 추가](https://github.com/codesche/2025-likelion-exercise/commit/a462dc88d673afe18a74a18e518c3576f5fc06d4)
 2025-06-25 | [feat(html): JwtToken 로그인 방식 구현 위한 코드 수정](https://github.com/codesche/2025-likelion-exercise/commit/d7da3d909cb08b60b8b3cb440c9b1d1c7bf7f948)
 2025-06-25 | [feat(html): JwtToken 로그인 방식 구현 위한 코드 수정](https://github.com/codesche/2025-likelion-exercise/commit/83bf23df57493d6b42d85328e111a5a311e124c4)
+
+## 2025-06-26
+
+링크: https://codesche.oopy.io/21dde3f7-e3a8-80d3-b37a-d3696ec1e198
+
+1. 테스트
+   1. JwtToken 테스트
+2. 소셜 로그인 (Googlem Kakao)
+   1. Config 수정
+   2. 소셜 로그인 코드 작성
+   3. application.properties 에 google, kakao 관련 정보 추가
+   4. 구글 로그인 테스트
+   5. 카카오톡 로그인 테스트
+3. 토큰을 제대로 불러오지 못하는 에러
+   1. JwtTokenFilter 쪽에 Cookie 쪽 토큰을 바라보는 메서드 추가 후 doFilterInternal 메서드에 적용
+4. 모니터링 실행
+   1. build.gradle 실행
+   2. application-properties 설정
+   3. Docker-compose yml 파일로 Grafana, Prometheus 세팅
+   4. Docker Container 확인
+5. 오늘 푸시한 커밋리스트
+
+| 날짜         | 커밋 메시지                                                                                                                                                                               |
+|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 2025-06-26 | [feat(config): prometheus, grafana, logstash 관련 설정 추가](https://github.com/codesche/2025-likelion-exercise/commit/e31f3088fd041efe3b0b42dd73adbb9e94b1b327)                           |
+| 2025-06-26 | [feat(repository): 소셜 로그인 세션 처리 위한 RedisOAuth2AuthorizationRequestRepository 구현](https://github.com/codesche/2025-likelion-exercise/commit/4bbddabadd72160aba92b2933861dadb87bba651) |
+| 2025-06-26 | [feat(config): Redis 클라이언트 추가 위한 redisTemplate 생성 + host, port 정보 관련 내용 추가](https://github.com/codesche/2025-likelion-exercise/commit/d11953cc9e3bd97b073e8702856126b2a44721dd)      |
+| 2025-06-26 | [feat(service): 소셜 로그인 서비스 구현](https://github.com/codesche/2025-likelion-exercise/commit/b30a2bfe07c254488f675722dd49b13224ce8be3)                                                   |
+| 2025-06-26 | [feat(auth2): 로그아웃 동작을 구현하기 위한 클래스 생성](https://github.com/codesche/2025-likelion-exercise/commit/41535af6acb4182400e7e7125504c4a98630bb92)                                           |
+| 2025-06-26 | [feat(auth2): 로그인 동작을 커스텀으로 구현하기 위한 클래스 생성](https://github.com/codesche/2025-likelion-exercise/commit/b634e543271c6b00ad0c704b0e6ed9a57f73f047)                                      |
+| 2025-06-26 | [feat(security): 소셜 로그인, 로그아웃, 웹소켓 핸드셰이크, 프로메테우스 모두 사용할 수 있게 해주는 설정 추가](https://github.com/codesche/2025-likelion-exercise/commit/553728efdb443a45dca3d884865a5efeac4bf9d3)          |
+| 2025-06-26 | [fix(html): 소셜 로그인 접속 API 주소 가능하도록 수정](https://github.com/codesche/2025-likelion-exercise/commit/e4ef9bce2d2595f14a5bb3f676f3a3597b9c4a77)                                           |
+| 2025-06-26 | [fix(jwt): JWT 인증 필터에 extractTokenFromRequest 메서드 추가 및 적용](https://github.com/codesche/2025-likelion-exercise/commit/1683229382323659f8cdc877a6e1d6e861ab8129)                       |
+| 2025-06-26 | [fix(service): JWT 인증 받은 사용자에 한해 게시글 삭제가 가능하도록 수정](https://github.com/codesche/2025-likelion-exercise/commit/183102864c0a349b327813cdef8765245ed9f66a)                               |
+| 2025-06-26 | [chore(controller): oAuth2, 프로메테우스, Spring Boot Actuator 추가](https://github.com/codesche/2025-likelion-exercise/commit/f53c9f68ac732a0c6ff49201dee168062de7202a)                     |
+| 2025-06-26 | [fix(controller): JWT 토큰 인증 받은 사용자만 게시글을 수정, 삭제할 수 있도록 수정](https://github.com/codesche/2025-likelion-exercise/commit/4388e6a40c460a2f1cc7593d4ce8f6faf690b8a6)                       |
+| 2025-06-26 | [feat(html): 수정 화면 쪽 사용자 ID hidden 처리하는 로직 추가](https://github.com/codesche/2025-likelion-exercise/commit/6d4247b12cef3e6bb661756effaa52feeb951de3)                                   |
+| 2025-06-26 | [feat(repository): Auth 엔티티에 토큰 저장하는 메서드 추가](https://github.com/codesche/2025-likelion-exercise/commit/d11f815332bc51ad4a1026a3890049143a635127)                                     |
+| 2025-06-26 | [feat(controller): 로그아웃 기능 추가 + 일반 로그인 API 로직 수정](https://github.com/codesche/2025-likelion-exercise/commit/07636ca5c4427c671c6da4120b0884f9640a5958)                                |
+| 2025-06-26 | [feat(config): 소셜 로그인 Google, Kakao 설정 추가](https://github.com/codesche/2025-likelion-exercise/commit/2d25bed878a16b6fe9266f7746daeb23a6be9ee7)                                       |
