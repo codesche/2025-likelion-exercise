@@ -2,6 +2,7 @@ package org.example.backendproject.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                                 FilterChain filterChain
     ) throws ServletException, IOException {
 
-        String accessToken = getTokenFromRequest(request);      // 요청 헤더에서 토큰 추출
+        String accessToken = extractTokenFromRequest(request);      // 요청 헤더에서 토큰 추출
 
         if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
 
@@ -67,17 +68,17 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     // HTTP 요청 헤더에서 토큰을 추출하는 메서드
-    public String getTokenFromRequest(HttpServletRequest request) {
-
-        String token = null;
-
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            token = bearerToken.substring(7);
-        }
-
-        return token;
-    }
+//    public String getTokenFromRequest(HttpServletRequest request) {
+//
+//        String token = null;
+//
+//        String bearerToken = request.getHeader("Authorization");
+//        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+//            token = bearerToken.substring(7);
+//        }
+//
+//        return token;
+//    }
 
     // http 요청에서 사용자 인증 정보를 담는 객체
     private UsernamePasswordAuthenticationToken getAuthentication(String token) {
@@ -94,5 +95,36 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             userDetails.getAuthorities());      // 사용자의 권한
     }
 
+    private String extractTokenFromRequest(HttpServletRequest request) {
+        // 1. 쿠키에서 accessToken 확인
+        String cookieToken = extractTokenFromCookie(request);
+        if (StringUtils.hasText(cookieToken)) {
+            return cookieToken;
+        }
+
+        // 2. Authorization 헤더에서 토큰 확인
+        String bearerToken = request.getHeader("Authorization");
+
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7); // "Bearer " 제거
+        }
+
+        return null;
+    }
+
+    // 쿠키에서 accessToken을 추출하는 메서드
+    private String extractTokenFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("accessToken")) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        return null;
+    }
 
 }
