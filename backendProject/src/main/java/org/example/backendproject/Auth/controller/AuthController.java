@@ -2,6 +2,7 @@ package org.example.backendproject.Auth.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -39,8 +40,14 @@ public class AuthController {
     }
 
     /** 로그인 **/
-    @PostMapping("/loginSecurity")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+//    @PostMapping("/loginSecurity")
+//    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+//        LoginResponseDTO loginResponseDTO = authService.login(loginRequestDTO);
+//        return ResponseEntity.ok(loginResponseDTO);
+//    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
         LoginResponseDTO loginResponseDTO = authService.login(loginRequestDTO);
         return ResponseEntity.ok(loginResponseDTO);
     }
@@ -78,5 +85,31 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+
+        // accessToken 쿠키 삭제
+        Cookie accessTokenCookie = new Cookie("accessToken", null);
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(0); // 즉시 만료!
+
+        // refreshToken 쿠키 삭제
+        Cookie refreshTokenCookie = new Cookie("refreshToken", null);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(0);
+
+        // 응답에 쿠키 삭제 포함
+        response.addCookie(accessTokenCookie);
+        response.addCookie(refreshTokenCookie);
+
+        // (추가) 서버 세션도 있다면 만료
+        // request.getSession().invalidate();
+
+        return ResponseEntity.ok().body("로그아웃 완료 (쿠키 삭제됨)");
+    }
+
 
 }
