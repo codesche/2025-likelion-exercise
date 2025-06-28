@@ -3,6 +3,7 @@ package org.example.backendproject.user.service;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.backendproject.user.dto.UserDTO;
 import org.example.backendproject.user.dto.UserProfileDTO;
 import org.example.backendproject.user.entity.User;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -128,7 +130,7 @@ public class UserService {
         }
 
         long end = System.currentTimeMillis();
-        System.out.println("JPA saveAll 저장 소요 시간(ms): " + (end - start));
+        log.info("JPA saveAll 저장 소요 시간(ms): " + (end - start));
     }
 
 
