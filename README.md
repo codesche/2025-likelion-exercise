@@ -243,3 +243,50 @@
 2025-06-26 | [feat(repository): Auth 엔티티에 토큰 저장하는 메서드 추가](https://github.com/codesche/2025-likelion-exercise/commit/d11f815332bc51ad4a1026a3890049143a635127)
 2025-06-26 | [feat(controller): 로그아웃 기능 추가 + 일반 로그인 API 로직 수정](https://github.com/codesche/2025-likelion-exercise/commit/07636ca5c4427c671c6da4120b0884f9640a5958)
 2025-06-26 | [feat(config): 소셜 로그인 Google, Kakao 설정 추가](https://github.com/codesche/2025-likelion-exercise/commit/2d25bed878a16b6fe9266f7746daeb23a6be9ee7)
+
+
+## 2025-06-28
+
+링크: https://codesche.oopy.io/21ede3f7-e3a8-80c6-83d2-f381e558ecdc
+
+1. 예외 처리가 중요한 이유
+2. 예외를 구분해서 처리해야 하는 이유
+   1. 체크예외 (Checked Exception)
+   2. 언체크예외 (Unchecked Exception)
+3. 예외 코드 작성
+   1. GlobalExceptionHandler
+   2. ErrorResponse
+   3. 주요 사용하는 예외 처리 관련 코드
+   4. 예외 테스트
+4. 로그의 목적
+   1. 로그 적용
+5. 로그 수집기 (Elasticsearch + LogStash + Kibana 구축)
+   1. application-properties
+   2. ELK 설정 후 docker-compose.yml 파일 실행
+   3. logback-spring.yml 작성
+   4. localhost:9200/_cat/indices?v 에 접속하여 로그 확인
+   5. 로그 보기
+   6. ElasticSearch 인덱스 확인
+   7. 샤드란 무엇인가?
+6. AOP (Aspect-Oriented Programming)
+   1. 스프링에서의 공통 기능
+   2. AOP 용어
+7. 컨테이너 여러 개 실행하여 Grafana 에서 확인하는 절차
+   1. prometheus.yml 파일 주석 해제
+   2. Jenkins build 실행
+8. 오늘 푸시한 커밋리스트 (다음 날 커밋, 푸시 진행)
+
+
+| 날짜  | 커밋 메세지 |
+| :---: | :---------: |
+2025-06-28 | [fix(service): System.out.println -> log.info(Slf4j) 로 변경](https://github.com/codesche/2025-likelion-exercise/commit/21a6730e4407abffb119da6298f626db15c2b9df)
+2025-06-28 | [feat(config): 예외 처리 관련 보안 해제](https://github.com/codesche/2025-likelion-exercise/commit/792973a570d9f8371add8ca11d7e3940be0e5a0d)
+2025-06-28 | [fix(config): 다중 컨테이너 실행 후 Grafana 에서 확인하기 위해 주석 해제](https://github.com/codesche/2025-likelion-exercise/commit/8406632963b139605a4cd5cdca191a807a825a5b)
+2025-06-28 | [feat(config): logStash 실행 위한 conf 파일 생성](https://github.com/codesche/2025-likelion-exercise/commit/58a83afcca6cc037b8dc5eb00e6e7b9190d45522)
+2025-06-28 | [feat(config): logStash 실행 위한 xml 파일 생성](https://github.com/codesche/2025-likelion-exercise/commit/a5b7c501e62804cd9aae1744b86750fc32feb921)
+2025-06-28 | [feat(aop): 공통으로 관리하고 싶은 기능을 담당하는 클래스 생성](https://github.com/codesche/2025-likelion-exercise/commit/73f04e8127fe7df120bcad34df0771b4c221bdec)
+2025-06-28 | [feat(jwt): jwt 인증 필터에서 미비된 부분 추가](https://github.com/codesche/2025-likelion-exercise/commit/e919424727277086a27ff34a80d3839e10f8b1b2)
+2025-06-28 | [fix(handler): 예외 처리 위한 handler 생성](https://github.com/codesche/2025-likelion-exercise/commit/91db54c2f234ed29259e94aa681b4a37a01893ec)
+2025-06-28 | [fix(response): 예외 처리 위한 response 생성](https://github.com/codesche/2025-likelion-exercise/commit/1d81ce04d288d3863781b191d2c7e0b3499fd194)
+2025-06-28 | [fix(config): ELK 위한 구성 파일 전면 수정](https://github.com/codesche/2025-likelion-exercise/commit/96435400109f7ebe844c017d59f4d16d7937f015)
+2025-06-28 | [fix(service): System.out.println -> Slf4j의 log로 수정](https://github.com/codesche/2025-likelion-exercise/commit/a7d2c16733ad2ed215039c5ca15b5804420c2cfd)
