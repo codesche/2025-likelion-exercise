@@ -144,13 +144,13 @@
                 ? { "Authorization": "Bearer " + localStorage.getItem("accessToken") }
                 : {}
         })
-            .then(res => res.json())
-            .then(list => {
-                console.log(list); // 여기에 바로 찍기
-                renderBoardList(list.content || list); // 아래 새 함수 이용
-                renderPaging(list);
-                currentPage = list.number || 0;
-            });
+        .then(res => res.json())
+        .then(list => {
+            console.log(list); // 여기에 바로 찍기
+            renderBoardList(list.content || list); // 아래 새 함수 이용
+            renderPaging(list);
+            currentPage = list.number || 0;
+        });
     }
 
     //페이징 적용전
@@ -204,16 +204,16 @@
                 ? { "Authorization": "Bearer " + localStorage.getItem("accessToken") }
                 : {}
         })
-            .then(res => res.json())
-            .then(list => {
-                console.log(list); // 여기에 바로 찍기
-                renderBoardList(list.content || list);  //page 객체
-                renderPaging(list);
-                currentPage = list.number;
-            })
-            .catch(err => {
-                alert("에러: " + err.message);
-            });
+        .then(res => res.json())
+        .then(list => {
+            console.log(list); // 여기에 바로 찍기
+            renderBoardList(list.content || list);  //page 객체
+            renderPaging(list);
+            currentPage = list.number;
+        })
+        .catch(err => {
+            alert("에러: " + err.message);
+        });
     }
     loadBoards(0)
 
@@ -276,16 +276,16 @@
             ),
             body: JSON.stringify(data)
         })
-            .then(res => {
-                if(res.ok) return res.json();
-                return res.text().then(msg => { throw new Error(msg); });
-            })
-            .then(() => {
-                showList();
-            })
-            .catch(err => {
-                document.getElementById('write-msg').innerHTML = `<span class="error">등록 실패: ${err.message}</span>`;
-            });
+        .then(res => {
+            if(res.ok) return res.json();
+            return res.text().then(msg => { throw new Error(msg); });
+        })
+        .then(() => {
+            showList();
+        })
+        .catch(err => {
+            document.getElementById('write-msg').innerHTML = `<span class="error">등록 실패: ${err.message}</span>`;
+        });
     });
 
     let currentBoardId = null;
@@ -297,33 +297,33 @@
                 ? { "Authorization": "Bearer " + localStorage.getItem("accessToken") }
                 : {}
         })
-            .then(res => res.json())
-            .then(board => {
-                currentBoardId = board.id;
-                document.getElementById('detail-title').textContent = board.title;
-                document.getElementById('detail-content').textContent = board.content;
-                document.getElementById('detail-writer').textContent = board.user_id;
+        .then(res => res.json())
+        .then(board => {
+            currentBoardId = board.id;
+            document.getElementById('detail-title').textContent = board.title;
+            document.getElementById('detail-content').textContent = board.content;
+            document.getElementById('detail-writer').textContent = board.user_id;
 
-                console.log("localStorage.getItem(user_id) = ",localStorage.getItem("user_id"))
-                console.log("board.user_id = ",board.user_id)
+            console.log("localStorage.getItem(user_id) = ",localStorage.getItem("user_id"))
+            console.log("board.user_id = ",board.user_id)
 
-                document.getElementById('detail-writer').textContent = board.username;
-                document.getElementById('detail-date').textContent = board.created_date ? board.created_date.substring(0,10) : '';
-                document.getElementById('list-area').style.display = 'none';
-                document.getElementById('write-area').style.display = 'none';
-                document.getElementById('detail-area').style.display = '';
-                document.getElementById('edit-area').style.display = 'none';
-                document.getElementById('search-area').style.display = 'none'; // ← 검색창 숨기기
-                const myUserId = localStorage.getItem("user_id");
-                if (String(board.user_id) === String(myUserId)) {
-                    document.getElementById('edit-btn').style.display = '';
-                    document.getElementById('delete-btn').style.display = '';
-                } else {
-                    document.getElementById('edit-btn').style.display = 'none';
-                    document.getElementById('delete-btn').style.display = 'none';
-                }
-                loadComments(board.id); // 댓글 로딩!
-            });
+            document.getElementById('detail-writer').textContent = board.username;
+            document.getElementById('detail-date').textContent = board.created_date ? board.created_date.substring(0,10) : '';
+            document.getElementById('list-area').style.display = 'none';
+            document.getElementById('write-area').style.display = 'none';
+            document.getElementById('detail-area').style.display = '';
+            document.getElementById('edit-area').style.display = 'none';
+            document.getElementById('search-area').style.display = 'none'; // ← 검색창 숨기기
+            const myUserId = localStorage.getItem("user_id");
+            if (String(board.user_id) === String(myUserId)) {
+                document.getElementById('edit-btn').style.display = '';
+                document.getElementById('delete-btn').style.display = '';
+            } else {
+                document.getElementById('edit-btn').style.display = 'none';
+                document.getElementById('delete-btn').style.display = 'none';
+            }
+            loadComments(board.id); // 댓글 로딩!
+        });
     }
     function showEditForm() {
         fetchWithAuth(`/boards/${currentBoardId}`, {
@@ -332,20 +332,20 @@
                 ? { "Authorization": "Bearer " + localStorage.getItem("accessToken") }
                 : {}
         })
-            .then(res => res.json())
-            .then(board => {
-                console.log("board = ", board); // 이렇게 해도 되고
-                console.log("board = " + JSON.stringify(board)); // 이게 가장 깔끔
-                document.getElementById('edit-title').value = board.title;
-                document.getElementById('edit-content').value = board.content;
-                document.getElementById('edit-user_id').value = board.user_id;
-                document.getElementById('list-area').style.display = 'none';
-                document.getElementById('write-area').style.display = 'none';
-                document.getElementById('detail-area').style.display = 'none';
-                document.getElementById('edit-area').style.display = '';
-                document.getElementById('edit-msg').innerHTML = '';
-                document.getElementById('search-area').style.display = 'none'; // ← 검색창 숨기기
-            });
+        .then(res => res.json())
+        .then(board => {
+            console.log("board = ", board); // 이렇게 해도 되고
+            console.log("board = " + JSON.stringify(board)); // 이게 가장 깔끔
+            document.getElementById('edit-title').value = board.title;
+            document.getElementById('edit-content').value = board.content;
+            document.getElementById('edit-user_id').value = board.user_id;
+            document.getElementById('list-area').style.display = 'none';
+            document.getElementById('write-area').style.display = 'none';
+            document.getElementById('detail-area').style.display = 'none';
+            document.getElementById('edit-area').style.display = '';
+            document.getElementById('edit-msg').innerHTML = '';
+            document.getElementById('search-area').style.display = 'none'; // ← 검색창 숨기기
+        });
     }
     document.getElementById('edit-form').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -363,16 +363,16 @@
             ),
             body: JSON.stringify(data)
         })
-            .then(res => {
-                if(res.ok) return res.json();
-                return res.text().then(msg => { throw new Error(msg); });
-            })
-            .then(() => {
-                showList();
-            })
-            .catch(err => {
-                document.getElementById('edit-msg').innerHTML = `<span class="error">수정 실패: ${err.message}</span>`;
-            });
+        .then(res => {
+            if(res.ok) return res.json();
+            return res.text().then(msg => { throw new Error(msg); });
+        })
+        .then(() => {
+            showList();
+        })
+        .catch(err => {
+            document.getElementById('edit-msg').innerHTML = `<span class="error">수정 실패: ${err.message}</span>`;
+        });
     });
     function deleteBoard() {
         if(!confirm("정말 삭제하시겠습니까?")) return;
@@ -383,13 +383,13 @@
                 ? { "Authorization": "Bearer " + localStorage.getItem("accessToken") }
                 : {}
         })
-            .then(res => {
-                if(res.ok) showList();
-                else return res.text().then(msg => { throw new Error(msg); });
-            })
-            .catch(err => {
-                alert('삭제 실패: ' + err.message);
-            });
+        .then(res => {
+            if(res.ok) showList();
+            else return res.text().then(msg => { throw new Error(msg); });
+        })
+        .catch(err => {
+            alert('삭제 실패: ' + err.message);
+        });
     }
 
 
@@ -402,20 +402,20 @@
             headers: (localStorage.getItem("accessToken"))
                 ? { "Authorization": "Bearer " + localStorage.getItem("accessToken") } : {}
         })
-            .then(res => res.json())
-            .then(list => {
-                const commentTree = buildCommentTree(list);
-                let html = `
-                <h4 style="margin-top:20px">💬 댓글</h4>
-                <div style="margin-bottom:16px;">
-                    <textarea id="comment-content" placeholder="댓글을 입력하세요" style="width:90%;height:50px"></textarea>
-                    <button onclick="writeComment()" class="write-btn" style="width:80px; padding:8px 0; margin-left:5px;">등록</button>
-                    <div class="msg" id="comment-msg"></div>
-                </div>
-                <div>${renderCommentList(commentTree)}</div>
-                `;
-                document.getElementById('comment-area').innerHTML = html;
-            });
+        .then(res => res.json())
+        .then(list => {
+            const commentTree = buildCommentTree(list);
+            let html = `
+            <h4 style="margin-top:20px">💬 댓글</h4>
+            <div style="margin-bottom:16px;">
+                <textarea id="comment-content" placeholder="댓글을 입력하세요" style="width:90%;height:50px"></textarea>
+                <button onclick="writeComment()" class="write-btn" style="width:80px; padding:8px 0; margin-left:5px;">등록</button>
+                <div class="msg" id="comment-msg"></div>
+            </div>
+            <div>${renderCommentList(commentTree)}</div>
+            `;
+            document.getElementById('comment-area').innerHTML = html;
+        });
 
         console.log("comments accessToken = ", localStorage.getItem("accessToken"));
 
@@ -497,6 +497,7 @@
         }
         const username = localStorage.getItem("username") || "익명";
         const userId = localStorage.getItem("user_id");
+
         fetchWithAuth('/api/comments', {
             credentials: "include", // 쿠키도 항상 보냄 (로컬, CORS 모두 안전)
             method: 'POST',
