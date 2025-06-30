@@ -1,12 +1,15 @@
 package org.example.backendproject.board.service;
 
 import jakarta.persistence.EntityManager;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.backendproject.board.dto.BoardDTO;
+import org.example.backendproject.board.elasticsearch.dto.BoardEsDocument;
+import org.example.backendproject.board.elasticsearch.service.BoardEsService;
 import org.example.backendproject.board.entity.Board;
 import org.example.backendproject.board.repository.BatchRepository;
 import org.example.backendproject.board.repository.BoardRepository;
@@ -28,6 +31,9 @@ public class BoardService {
     private final BatchRepository batchRepository;
 
     private final EntityManager em;
+
+    // 엘라스틱서치 Service
+    private final BoardEsService boardEsService;
 
     /** 글 등록 **/
     @Transactional
@@ -51,6 +57,19 @@ public class BoardService {
         // 연관관계 매핑
         board.setUser(user);
         Board saved = boardRepository.save(board);
+        // mysql 저장 완료
+
+        // 엘라스틱서치에 저장 시작
+        BoardEsDocument doc = BoardEsDocument.builder()
+            .id(String.valueOf(board.getId()))
+            .title(board.getTitle())
+            .content(board.getContent())
+            .userId(board.getUser().getId())
+            .username(board.getUser().getUserProfile().getUsername())
+            .created_date(String.valueOf(board.getCreated_date()))
+            .updated_date(String.valueOf(board.getUpdated_date()))
+            .build();
+        boardEsService.save(doc);
 
         return toDTO(saved);
     }
@@ -71,6 +90,19 @@ public class BoardService {
         board.setTitle(dto.getTitle());
         board.setContent(dto.getContent());
         boardRepository.save(board);
+
+        // 엘라스틱서치에 데이터 수정
+        BoardEsDocument doc = BoardEsDocument.builder()
+            .id(String.valueOf(board.getId()))
+            .title(board.getTitle())
+            .content(board.getContent())
+            .userId(board.getUser().getId())
+            .username(board.getUser().getUserProfile().getUsername())
+            .created_date(String.valueOf(board.getCreated_date()))
+            .updated_date(String.valueOf(board.getUpdated_date()))
+            .build();
+        boardEsService.save(doc);
+
         return toDTO(board);
     }
 
@@ -84,10 +116,15 @@ public class BoardService {
             throw new IllegalArgumentException("삭제 권한이 없습니다.");
         }
 
-        if (!boardRepository.existsById(boardId))
+        if (!boardRepository.existsById(boardId)) {
             throw new IllegalArgumentException("게시글 없음: " + boardId);
+        }
 
+        // mysql 삭제
         boardRepository.deleteById(boardId);
+
+        // 엘라스틱서치 삭제
+        boardEsService.deleteById(String.valueOf(boardId));
     }
 
     /** 페이지 적용 전 **/
@@ -138,6 +175,22 @@ public class BoardService {
 
             // 1. MySQL로 INSERT
             batchRepository.batchInsert(batchList);
+
+            // 2. MySQL에 Insert한 데이터를 다시 조회
+            List<BoardDTO> saveBoards = batchRepository.findByBatchKey(batchKey);
+
+            // 3. 엘라스틱서치용으로 변환
+            List<BoardEsDocument> documents = saveBoards.stream()
+                .map(BoardEsDocument::from) // DTO -> 엘라스틱서치용 dto로 변환
+                .toList();
+
+            try {
+                // 4. 엘라스틱서치 bulk 인덱싱
+                boardEsService.bulkIndexInsert(documents);
+            } catch (IOException e) {
+                log.error("[BOARD][BATCH] ElasticSearch 벌크 인덱싱 실패: {}", e.getMessage(), e);
+            }
+
         }
 
         Long end = System.currentTimeMillis();
