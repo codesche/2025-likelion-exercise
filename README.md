@@ -245,7 +245,7 @@
 2025-06-26 | [feat(config): 소셜 로그인 Google, Kakao 설정 추가](https://github.com/codesche/2025-likelion-exercise/commit/2d25bed878a16b6fe9266f7746daeb23a6be9ee7)
 
 
-## 2025-06-28
+## 2025-06-27
 
 링크: https://codesche.oopy.io/21ede3f7-e3a8-80c6-83d2-f381e558ecdc
 
@@ -290,3 +290,36 @@
 2025-06-28 | [fix(response): 예외 처리 위한 response 생성](https://github.com/codesche/2025-likelion-exercise/commit/1d81ce04d288d3863781b191d2c7e0b3499fd194)
 2025-06-28 | [fix(config): ELK 위한 구성 파일 전면 수정](https://github.com/codesche/2025-likelion-exercise/commit/96435400109f7ebe844c017d59f4d16d7937f015)
 2025-06-28 | [fix(service): System.out.println -> Slf4j의 log로 수정](https://github.com/codesche/2025-likelion-exercise/commit/a7d2c16733ad2ed215039c5ca15b5804420c2cfd)
+
+
+## 2025-06-30
+
+링크: https://codesche.oopy.io/222de3f7-e3a8-80cd-9143-d5b20bd08724
+
+1. ThreadLocal
+   1. 주요 사용처
+   2. ThreadLocal + 로그 추적기
+2. ElasticSearch
+   1. ElasticSearch란?
+   2. 인덱싱
+   3. 역색인이란?
+   4. ElasticSearch 인덱싱의 실제 흐름
+   5. ElasticSearch 노드(node), 클러스터(cluster), 샤드(shard), 복제(replica)
+   6. 운영환경에서 ElasticSearch 검색엔진의 최소 권장 노드(서버) 수
+   7. 쿼리 종류
+   8. 실습 - 검색은 ElasticSearch로 진행, CRUD는 MySQL에서
+3. 오늘 푸시한 커밋리스트
+
+| 날짜  | 커밋 메세지 |
+| :---: | :---------: |
+2025-06-30 | [feat(handler): 스레드마다 고유한 요청 ID를 저장 및 불러오는 역할 생성](https://github.com/codesche/2025-likelion-exercise/commit/11c5496145e1555e213552b2fe0918cc95ed3140)
+2025-06-30 | [feat(aop): ThreadLocal 관련 로직 추가](https://github.com/codesche/2025-likelion-exercise/commit/1a704c2656be2be1bdeab072c50e7dddd8e7c75d)
+2025-06-30 | [feat(jwt): ThreadLocal 관련 로직 추가](https://github.com/codesche/2025-likelion-exercise/commit/85154e3d5b23ace6d41ca25ea17d5b65941f04c0)
+2025-06-30 | [feat(service): ElasitcSearch 관련 비즈니스 로직 추가](https://github.com/codesche/2025-likelion-exercise/commit/fad00a20ed23b8e1f290c06608bb2db344e72747)
+2025-06-30 | [feat(config): ElasitcSearch 의존 라이브러리 추가](https://github.com/codesche/2025-likelion-exercise/commit/151e21f032b0560fdf0e18cdadfc7b121169b53c)
+2025-06-30 | [feat(repository): ElasticSearch 비즈니스 로직 구현](https://github.com/codesche/2025-likelion-exercise/commit/3bd0b33add809520822469b1424f9a1b4dc89671)
+2025-06-30 | [feat(repository): ElasticsearchRepository 구현체 생성](https://github.com/codesche/2025-likelion-exercise/commit/ab013c1ff4732f2b05aa93b6eb7bd55c150e399c)
+2025-06-30 | [feat(dto): ElasticSearch에 적용될 문서를 자바 객체로 정의](https://github.com/codesche/2025-likelion-exercise/commit/7bb733b3ea4deff35423bdb701b33add78165148)
+2025-06-30 | [feat(controller): ElasticSearch 검색결과 page 형태로 감싼 다음 응답을 json으로 반환](https://github.com/codesche/2025-likelion-exercise/commit/4dcc07573ed72297fa472a8f42f6bf2aaf9c406e)
+2025-06-30 | [fix(html): 들여쓰기 추가](https://github.com/codesche/2025-likelion-exercise/commit/a5cb230786d92e00538c9a04a9bf723d74f2837d)
+2025-06-30 | [feat(repository): ElasticSearch 관련 조회 기능 추가](https://github.com/codesche/2025-likelion-exercise/commit/1c00f56faca4b5f037c5946becaca70d96f4e5f3)
