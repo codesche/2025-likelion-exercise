@@ -47,14 +47,12 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests((auth) -> auth
                 .requestMatchers("/", "/index.html", "/*.html", "/favicon.ico",
-                    "/css/**", "/fetchWithAuth.js", "/js/**", "/images/**",
-                   "/.well-known/**" ).permitAll()                       // 정적 리소스 누구나 접근
+                    "/css/**", "/fetchWithAuth.js", "/js/**", "/images/**").permitAll()                       // 정적 리소스 누구나 접근
                     .requestMatchers("/boards/**", "/api/comments/**").authenticated()
 
                     //인증필요
                     .requestMatchers(
                         "/api/auth/**",       // 로그인/회원가입/로그아웃 등 인증 없이 사용
-//                        "/api/comments/**",   // 댓글 읽기 등 인증 없이 사용
                         "/oauth2/**",         // 소셜 로그인 엔드포인트는 누구나 접근
                         "/login/**",          // 스프링 시큐리티 내부 로그인 관련 엔드포인트
                         "/ws-gpt", "/ws-chat", // 웹소켓 핸드셰이크
