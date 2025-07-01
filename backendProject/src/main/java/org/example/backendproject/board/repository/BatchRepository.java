@@ -17,8 +17,8 @@ public class BatchRepository {
 
     public void batchInsert(List<BoardDTO> boardDTO) {
 
-        String sql = "INSERT INTO board (title, content, user_id, created_date, updated_date, batch_key) "
-            + "VALUES (?, ?, ?, ?, ?, ?) ";
+        String sql = "INSERT INTO board (title, content, user_id, created_date, updated_date, batch_key, view_count) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?) ";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -29,6 +29,7 @@ public class BatchRepository {
                 ps.setString(4, String.valueOf(dto.getCreated_date()));
                 ps.setString(5, String.valueOf(dto.getUpdated_date()));
                 ps.setString(6, dto.getBatchKey());
+                ps.setLong(7, dto.getViewCount() != null ? dto.getViewCount() : 0L);
             }
 
             @Override
@@ -39,7 +40,7 @@ public class BatchRepository {
     }
 
     public List<BoardDTO> findByBatchKey(String batchKey) {
-        String sql = "SELECT b.id, b.title, b.content, b.user_id, b.created_date, b.updated_date, b.batch_key, up.username " +
+        String sql = "SELECT b.id, b.title, b.content, b.user_id, b.created_date, b.updated_date, b.batch_key, b.view_count, up.username " +
             "FROM board b " +
             "JOIN user u ON b.user_id = u.id " +
             "JOIN user_profile up ON up.user_id = u.id " +
@@ -55,6 +56,7 @@ public class BatchRepository {
             dto.setUpdated_date(rs.getTimestamp("updated_date") != null ? rs.getTimestamp("updated_date").toLocalDateTime() : null);
             dto.setBatchKey(rs.getString("batch_key"));
             dto.setUsername(rs.getString("username"));
+            dto.setViewCount(rs.getLong("view_count"));
             return dto;
         });
     }
