@@ -1,5 +1,6 @@
 package org.example.backendproject.board.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,8 +26,11 @@ public class BoardDTO {
 
     private String batchKey;
 
+    @JsonProperty("view_count")
+    private Long viewCount;
+
     public BoardDTO(Long id, String title, String content, String username, Long user_id,
-        LocalDateTime created_date, LocalDateTime updated_date) {
+        LocalDateTime created_date, LocalDateTime updated_date, Long viewCount) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -34,5 +38,6 @@ public class BoardDTO {
         this.user_id = user_id;
         this.created_date = created_date;
         this.updated_date = updated_date;
+        this.viewCount = viewCount;
     }
 }
