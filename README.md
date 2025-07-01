@@ -327,6 +327,7 @@
 
 ## 2025-07-01
 
+링크: https://codesche.oopy.io/222de3f7-e3a8-803d-aabd-dbacf9a77fb1
 
 1. Kafka
    1. 검색어 이벤트 처리
