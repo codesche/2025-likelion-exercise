@@ -1,7 +1,6 @@
 package org.example.backendproject.board.service;
 
 import jakarta.persistence.EntityManager;
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -9,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.backendproject.board.dto.BoardDTO;
 import org.example.backendproject.board.elasticsearch.dto.BoardEsDocument;
+import org.example.backendproject.board.elasticsearch.repository.BoardEsRepository;
 import org.example.backendproject.board.elasticsearch.service.BoardEsService;
 import org.example.backendproject.board.entity.Board;
 import org.example.backendproject.board.repository.BatchRepository;
@@ -34,6 +34,7 @@ public class BoardService {
 
     // 엘라스틱서치 Service
     private final BoardEsService boardEsService;
+    private final BoardEsRepository boardEsRepository;
 
     /** 글 등록 **/
     @Transactional
@@ -75,10 +76,20 @@ public class BoardService {
     }
 
     /** 게시글 상세 조회 **/
-    @Transactional(readOnly = true)
+    @Transactional
     public BoardDTO getBoardDetail(Long boardId) {
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new IllegalArgumentException("게시글 없음: " + boardId));
+
+        // mysql 조회수 증가
+        board.setViewCount(board.getViewCount() + 1);
+
+        // 엘라스틱서치 조회수 증가
+        BoardEsDocument esDocument = boardEsRepository.findById(String.valueOf(boardId))
+            .orElseThrow(() -> new IllegalArgumentException("ES에 게시글 없음 : " + boardId));
+        esDocument.setView_count(board.getViewCount());
+        boardEsService.save(esDocument);
+
         return toDTO(board);
     }
 
@@ -157,9 +168,10 @@ public class BoardService {
     public void batchSaveBoard(List<BoardDTO> boardDTOList) {
         Long start = System.currentTimeMillis();
 
-        int batchsize = 1000;       // 한번에 처리할 배치 크기
+        int batchsize = 10;       // 한번에 처리할 배치 크기
         for (int i = 0; i < boardDTOList.size(); i += batchsize) {      // i는 1000씩 증가
             // 전체 데이터를 1000개씩 잘라서 배치리스트에 담는다.
+            long batchStart = System.currentTimeMillis();
 
             int end = Math.min(boardDTOList.size(), i + batchsize);     // 두 개의 숫자 중 작은 수를 반환
             List<BoardDTO> batchList = boardDTOList.subList(i, end);
@@ -184,13 +196,30 @@ public class BoardService {
                 .map(BoardEsDocument::from) // DTO -> 엘라스틱서치용 dto로 변환
                 .toList();
 
-            try {
-                // 4. 엘라스틱서치 bulk 인덱싱
-                boardEsService.bulkIndexInsert(documents);
-            } catch (IOException e) {
-                log.error("[BOARD][BATCH] ElasticSearch 벌크 인덱싱 실패: {}", e.getMessage(), e);
+            // 4. ElasticSearch 벌크 인덱싱 (재시도 포함)
+            boolean success = false;
+            int retryCount = 3;
+            while (retryCount-- > 0 && !success) {
+                try {
+                    // 4. 엘라스틱서치 bulk 인덱싱
+                    boardEsService.bulkIndexInsert(documents);
+                    success = true;
+                } catch (Exception e) {
+                    log.warn("[BOARD][BATCH] Elasticsearch 인덱싱 실패 (남은 재시도 {}회): {}", retryCount, e.getMessage());
+                    if (retryCount == 0) {
+                        log.error("[BOARD][BATCH] Elasticsearch 최종 실패. 수동 복구 필요: {}", e.getMessage(), e);
+                    }
+                    try {
+                        Thread.sleep(1000); // 1초 대기 후 재시도
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
             }
 
+            long batchEnd = System.currentTimeMillis();
+            log.info("[BOARD][BATCH] {}~{} ({}건) 처리 완료 - {} ms",
+                i, end - 1, batchList.size(), batchEnd - batchStart);
         }
 
         Long end = System.currentTimeMillis();
@@ -209,6 +238,7 @@ public class BoardService {
 
         dto.setCreated_date(board.getCreated_date());
         dto.setUpdated_date(board.getUpdated_date());
+        dto.setViewCount(board.getViewCount());
         return dto;
     }
 
