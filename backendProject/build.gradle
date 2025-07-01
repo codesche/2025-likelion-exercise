@@ -31,9 +31,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // 20250701 - Kafka 추가
+    implementation 'org.springframework.kafka:spring-kafka'
+
     // 20250630 - ElasticSearch 추가
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
-    implementation 'co.elastic.clients:elasticsearch-java:8.12.2'
+    implementation 'co.elastic.clients:elasticsearch-java'
 
     // 20250627 - Spring Boot Actuator   매트릭/모니터링
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
