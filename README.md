@@ -323,3 +323,54 @@
 2025-06-30 | [feat(controller): ElasticSearch 검색결과 page 형태로 감싼 다음 응답을 json으로 반환](https://github.com/codesche/2025-likelion-exercise/commit/4dcc07573ed72297fa472a8f42f6bf2aaf9c406e)
 2025-06-30 | [fix(html): 들여쓰기 추가](https://github.com/codesche/2025-likelion-exercise/commit/a5cb230786d92e00538c9a04a9bf723d74f2837d)
 2025-06-30 | [feat(repository): ElasticSearch 관련 조회 기능 추가](https://github.com/codesche/2025-likelion-exercise/commit/1c00f56faca4b5f037c5946becaca70d96f4e5f3)
+
+
+## 2025-07-01
+
+
+1. Kafka
+   1. 검색어 이벤트 처리
+   2. Kafka vs ELS(Logstash 기반) 차이
+   3. Kafka란?
+   4. Kafka 개념
+2. Kafka 실습
+   1. docker-compose.monitoring.yml 쪽에 Kafka 내용 추가
+   2. application-properties 설정
+   3. searchlog 패키지 생성 및 코드 작성
+   4. 코드 작성 후 실행 중인 Kafka 확인
+3. ElasticSearch - 조회수, 검색어 순위 키워드 조회, 정렬 작업
+   1. 조회수 칼럼 추가
+   2. DTO 수정 - viewCount 추가
+   3. BoardEsDocument 쪽에 view_count 추가
+   4. BoardRepository 수정 - 조회수 추가
+   5. board-index 내용 변경
+   6. BoardEsService - 검색어 순위 키워드 조회 + 정렬
+   7. BoardEsController - BoardEsService의 검색어 순위 키워드 조회 서비스 호출
+   8. 작업 이후 로그인하여 조회 결과 및 WAS 쪽 로그 확인
+   9. Kibana에서 검색어 통계 확인
+   10. Discover 에서 로그 확인
+   11. Postman 테스트 - 검색어 순위 키워드 조회
+4. 오늘 푸시한 커밋리스트
+
+| 날짜  | 커밋 메세지 |
+| :---: | :---------: |
+2025-07-01 | [feat(repository): ElasticSearch 저장/검색용 repository 생성](https://github.com/codesche/2025-likelion-exercise/commit/d1dd4559207dad8183a723d71b25b2035d2b3102)
+2025-07-01 | [feat(dto): kafka로 주고받는 메세지 포맷](https://github.com/codesche/2025-likelion-exercise/commit/13079efbca4e9d28becc809f46fbfa7c7a7d623c)
+2025-07-01 | [feat(service): ElasticSearch 저장, 통계 집계 서비스](https://github.com/codesche/2025-likelion-exercise/commit/59d77d594860585976a9a6ecd1ab4ff1ce02cd9c)
+2025-07-01 | [feat(document): ElasticSearch에 저장되는 검색 데이터](https://github.com/codesche/2025-likelion-exercise/commit/f545b19d2b24d930f1e4803dd0f60e115e2e1388)
+2025-07-01 | [feat(service): kafka에서 메세지를 꺼낸 다음 ElasticSearch로 넘기는 클래스 작성](https://github.com/codesche/2025-likelion-exercise/commit/2d8cc6ee311b7af4dd0fea5ab2edd283ecf726b2)
+2025-07-01 | [fix(config): well-known 제거](https://github.com/codesche/2025-likelion-exercise/commit/9b1402687fc35ffeadf43fb176d5ba0db5e917e5)
+2025-07-01 | [feat(config): Kafka로 메시지 보낼 설정 클래스 작성](https://github.com/codesche/2025-likelion-exercise/commit/9e665fa4ea20b596caa5fa8adea31f9803fde881)
+2025-07-01 | [feat(config): kafka에서 메세지를 받아오기 위한 설정 담당하는 Config 클래스 작성](https://github.com/codesche/2025-likelion-exercise/commit/453a72f79ee2dab6ea4b64357b3fba280c787f67)
+2025-07-01 | [feat(docker): kafka 사용 위한 config 내용 추가](https://github.com/codesche/2025-likelion-exercise/commit/cc366b75369f271ff2622f999fb587cc25e68d66)
+2025-07-01 | [feat(service): Kafka 의존성 라이브러리 추가](https://github.com/codesche/2025-likelion-exercise/commit/1259dfedff0923d37a1a2d48946f821caf9277ab)
+2025-07-01 | [feat(service): 조회수 증가 위한 readonly 제거 + 조회수 고려한 BulkInster 로직 수정 + DTO쪽 조회수 추가](https://github.com/codesche/2025-likelion-exercise/commit/65bf1d9d6aa02f3cc20b3d58c30c581c4f893b36)
+2025-07-01 | [feat(repository): 조회수 칼럼 추가 및 생성일 기준으로 정렬](https://github.com/codesche/2025-likelion-exercise/commit/3fab6a47c97d3053efe21ee291e366909a7a2f18)
+2025-07-01 | [feat(service): 정렬 + 검색어 순위 키워드 조회 기능 추가](https://github.com/codesche/2025-likelion-exercise/commit/1ce77be8a99930a8e4005c5f675ae0d9c6ed8dde)
+2025-07-01 | [feat(document): 조회수 추가](https://github.com/codesche/2025-likelion-exercise/commit/84419fe276d5ca089868425834689e411b9fa2c5)
+2025-07-01 | [feat(controller): 검색어 정보 카프카로 전송](https://github.com/codesche/2025-likelion-exercise/commit/46380edf76779cbc6e233a9f2998d8726474652d)
+2025-07-01 | [feat(dto): 조회수 칼럼 추가](https://github.com/codesche/2025-likelion-exercise/commit/9ac550c937d099c6476aa75e9f518cbb8d5ee55e)
+2025-07-01 | [fix(config): 조회수 칼럼 추가로 인한 내용 수정](https://github.com/codesche/2025-likelion-exercise/commit/8135b45d70b2b43f15b0b87b734d8f78d394b0c0)
+2025-07-01 | [feat(entity): 조회수 칼럼 추가 + content 내용의 허용 길이 속성 추가](https://github.com/codesche/2025-likelion-exercise/commit/cdaf19a4522f8ab75aee4d1ec3b9da1dab63ecd6)
+2025-07-01 | [feat(html): 조회수 확인 기능 추가 및 게시판 조회 시 칼럼 매칭 안 되는 이슈 처리](https://github.com/codesche/2025-likelion-exercise/commit/a8ca1e915cee1fb166ad1c5b264034b14067e8f4)
+2025-07-01 | [fix(repository): 조회수 칼럼 추가로 인한 코드 수정](https://github.com/codesche/2025-likelion-exercise/commit/6069ba3f21ceb188f6c0d88f6cb94032f9cf9d44)
